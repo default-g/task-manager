@@ -1,25 +1,22 @@
 const os = require('os');
 const { promisify } = require('util');
 const exec = promisify(require('child_process').exec)
+const si = require('systeminformation');
 
 
 async function getProcessesList() {
-    const commandResult = await exec('ps aux')
-    let output = commandResult.stdout;
-    let outArray = []
-    output = output.split('\n');
-    output.shift();
-    for (let item of output) {
-        let splittedItem = item.split(/(\s+)/);
-        let processInfo = {}
-        processInfo.PID = splittedItem[2];
-        processInfo.userName = splittedItem[0];
-        processInfo.cpuLoad = splittedItem[4] + "%";
-        processInfo.memoryLoad = splittedItem[6] + "%";
-        processInfo.command = splittedItem[20]
-        outArray.push(processInfo);
+    let processList = await (await si.processes()).list;
+    let processListMapped = [];
+    for (let process of processList) {
+        mappedProcess = {}
+        mappedProcess.PID = process.pid;
+        mappedProcess.userName = process.user;
+        mappedProcess.cpuLoad = process.cpu + '%';
+        mappedProcess.memoryLoad = process.mem + '%';
+        mappedProcess.command = process.command;
+        processListMapped.push(mappedProcess);
     }
-    return outArray;
+    return processListMapped;
 } 
 
 

@@ -10,7 +10,6 @@ socket.onopen = () => {
 socket.onmessage = message => {
     let fetchedData = JSON.parse(message.data);
     let processList = fetchedData.processesList;
-    console.log(processList);
     $('tbody').empty();
     for (let process of processList) {
         let row = '<tr>';
