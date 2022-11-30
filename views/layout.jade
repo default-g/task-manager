@@ -7,9 +7,14 @@ html
     link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
   body
   div(class="container")
-    nav(class="navbar navbar-expand-lg navbar-light bg-light")
+    nav(class="navbar fixed-top navbar-light bg-light")
       div(class="container-fluid")
-        a(href="/", class="navbar-brand") Task Manager
+        a(href="/", class="navbar-brand") 🖥️ Task Manager
+        ul(class="nav nav-pills")
+          li(class="nav-item") 
+            a(class="nav-link active", data-tab="process-list", href="#") Process List
+          li(class="nav-item") 
+            a(class="nav-link", data-tab="system-info", href="#") System Info
     block content
   script(type="text/javascript", src='/javascripts/bootstrap.min.js')
   script(type="text/javascript", src='/javascripts/jquery.min.js')

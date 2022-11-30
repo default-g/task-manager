@@ -1,13 +1,21 @@
 extends layout
 
 block content
-  table(class="table table-striped", style="max-width: 100%;")
-    thead
-      tr
-        th PID
-        th USERNAME
-        th CPULOAD
-        th MEMLOAD
-        th COMMAND
-    tbody
-      tr
+  div(class="container-fluid mt-12")
+    div(id="process-list", class="tab container")
+      table(class="table table-striped", style="max-width: 100%;")
+        thead
+          tr
+            th PID
+            th USERNAME
+            th CPULOAD
+            th MEMLOAD
+            th COMMAND
+        tbody
+          tr
+    div(id="system-info", class="tab container")
+      div(class="row sys")
+
+      
+      
+      
