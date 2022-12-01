@@ -7,7 +7,9 @@ var createError = require('http-errors'),
  indexRouter = require('./routes/index'),
  app = express(),
  http = require('http'),
- WebSocketServer = require('ws').Server;
+ WebSocketServer = require('ws').Server,
+ crypto = require('crypto'),
+ childProcess = require('child_process');
 
 server = http.createServer(app);
 server.listen(8999);
@@ -22,14 +24,43 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var wss = new WebSocketServer({server: server, path: '/echo'});
-wss.on('connection', (ws) => {
+
+var systemInfoSocket = new WebSocketServer({server: server, path: '/echo'});
+systemInfoSocket.on('connection', (ws) => {
   var sendSystemInfo = async () => {
     let result = await systemInfo();;
     ws.send(JSON.stringify(result));
   }
   setInterval(sendSystemInfo, 1000);
 })
+
+
+var shellSessions = new Map();
+
+server = http.createServer(app);
+server.listen(9000);
+var shellServer = new WebSocketServer({server: server, path: '/shell'});
+
+shellServer.on('connection', (ws) => {
+  let shellSession = childProcess.spawn('bash');
+
+  ws.on('message', message => {
+    shellSession.stdin.write(message + "\n");
+  });
+
+  shellSession.stdout.on('data', data => {
+    ws.send(data.toString());
+  })
+
+  shellSessions.set(ws, shellSession);
+
+});
+
+
+shellServer.on('close', (ws) => {
+  shellSessions.remove(shellSessions[shellServer.clients.find(ws)]);
+});
+
 
 app.use('/', indexRouter);
 

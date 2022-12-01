@@ -9,7 +9,6 @@ socket.onopen = () => {
 
 socket.onmessage = message => {
     let fetchedData = JSON.parse(message.data);
-    console.log(fetchedData);
     let processList = fetchedData.processesList;
     $('tbody').empty();
     for (let process of processList) {
@@ -53,4 +52,28 @@ $('.nav-link').on('click', function(e) {
     $(this).addClass('active');
     let tabId = $(this).data('tab');
     $('#' + tabId).show();
+});
+
+const shellSocketUrl = socketProtocol + '//' + window.location.hostname + ":9000" + '/shell';
+const shellSocket = new WebSocket(shellSocketUrl);
+
+shellSocket.onopen = () => console.log('Connection established!');
+
+shellSocket.onmessage = (message) => {
+    let appendedData = '<pre>' + message.data + '</pre>';
+    $('#shell-out').append(appendedData);
+    let scroll_to_bottom = document.getElementById('shell-out');
+	scroll_to_bottom.scrollTop = scroll_to_bottom.scrollHeight;
+    console.log(message.data);
+};
+
+$('#console-input').keydown(function (event) {
+    let keyPressed = event.keyCode || event.which;
+    if (keyPressed === 13) {
+        let data = $(this).val();
+        shellSocket.send($(this).val());
+
+        $('#shell-out').append('<pre>$' + data + '</pre>');
+        $(this).val('');
+    }
 });
