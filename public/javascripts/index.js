@@ -45,6 +45,7 @@ socket.onmessage = message => {
 }
 
 $('#system-info').hide();
+$('#shell').hide();
 
 $('.nav-link').on('click', function(e) {
     $('.tab').hide();

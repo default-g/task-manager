@@ -7,12 +7,19 @@ a {
   color: #00B7FF;
 }
 
-
 .tab {
   margin-top: 5vh;
 }
+
 #shell-out {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 10vm;
-  height: 500px;
+  height: 75vh;
   width: 100%;
 }
+
+#console-input {
+  width: 100%;
+  
+}
+

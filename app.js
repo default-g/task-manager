@@ -50,10 +50,17 @@ shellServer.on('connection', (ws) => {
 
   shellSession.stdout.on('data', data => {
     ws.send(data.toString());
+  });
+
+  shellSession.stdout.on('error', data => {
+    ws.send(data.toString());
+  });
+
+  shellSession.stderr.on('data', data => {
+    ws.send(data.toString());
   })
 
   shellSessions.set(ws, shellSession);
-
 });
 
 
