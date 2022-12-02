@@ -21,8 +21,6 @@ socket.onmessage = message => {
         $('tbody').append(row);
     }
 
-    let memory = fetchedData.freeMemory;
-    let cpus = fetchedData.cpus;
     $('.sys').empty();
     let generateRow = (fieldName, value) => {
         let row = '<div class="row alert alert-dark">';
@@ -31,7 +29,6 @@ socket.onmessage = message => {
         row += '</div>';
         return row;
     }
-    const cpuModel = fetchedData.cpus[0].model;
     const freeMemory = fetchedData.freeMemory;
     const hostname = fetchedData.hostName; 
     $('.sys').append(generateRow('HOSTNAME', hostname));
@@ -72,7 +69,11 @@ $('#console-input').keydown(function (event) {
     let keyPressed = event.keyCode || event.which;
     if (keyPressed === 13) {
         let data = $(this).val();
-        shellSocket.send($(this).val());
+        if (data.trim() == 'clear') {
+            $('#shell-out').empty();
+        } else {
+            shellSocket.send($(this).val());
+        }
 
         $('#shell-out').append('<pre>$' + data + '</pre>');
         $(this).val('');

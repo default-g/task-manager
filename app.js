@@ -65,7 +65,13 @@ shellServer.on('connection', (ws) => {
 
 
 shellServer.on('close', (ws) => {
-  shellSessions.remove(shellSessions[shellServer.clients.find(ws)]);
+  console.log('Closed connection')
+  shellSessions.remove(ws);
+});
+
+shellServer.on('error', (ws) => {
+  console.log('Closed connection')
+  shellSessions.remove(ws);
 });
 
 
